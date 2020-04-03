@@ -7,6 +7,7 @@
     <button type="button" class="mt-2 d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#tambahPesanan"><i class="fas fa-download fa-sm text-white-50"></i> Tambah Pesanan</button>
   </div>
   <!-- Button trigger modal -->
+
   <?= $this->session->flashdata('message'); ?>
   <!-- Modal -->
   <div class="modal fade" id="tambahPesanan" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -18,43 +19,43 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+
+        <?php
+        
+        ?>
         <form method="post" action="<?= base_url('admin/pesanan'); ?>">
           <div class="modal-body">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="nama">Kode Transaksi</label>
-              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="TRN-202004030001">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value=" ">
               <?= form_error('nama', '<small class="text-danger pl-2">', '</small>') ?>
-            </div>
+            </div> -->
             <div class="form-group">
-              <label for="kategori">Username</label>
-              <select class="form-control" id="kategori" name="kategori">
-                <option>anandanurj</option>
-                <option>bayufajariyanto</option>
-                <option>dellyagus</option>
+              <label for="username">Username</label>
+              <select class="form-control" id="username" name="username">
+              <?php foreach ($username as $u) : ?>
+                  <option><?= $u['username'] ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="form-group">
-              <label for="kategori">Barang</label>
-              <select class="form-control" id="kategori" name="kategori">
-                <option>Carrier</option>
-                <option>Coocking Set</option>
-                <option>Jaket</option>
-                <option>Lighting</option>
-                <option>Other</option>
-                <option>Sandal</option>
-                <option>Tenda</option>
+              <label for="barang">Barang</label>
+              <select class="form-control" id="barang" name="barang" size="5">
+                <?php foreach ($barang as $b) : ?>
+                  <option value="<?= $b['id']; ?>"><?= $b['nama'] ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="form-group">
-              <label for="stok">Jumlah Barang</label>
-              <input type="text" class="form-control" max="3" name="stok" id="stok" value="<?= set_value('stok'); ?>" placeholder="Jumlah barang">
+              <label for="jumlah">Jumlah Barang</label>
+              <input type="text" class="form-control" name="jumlah" id="jumlah" value="<?= set_value('jumlah'); ?>" placeholder="Jumlah barang">
               <?= form_error('stok', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="harga">Harga</label>
               <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="Rp. 20000">
               <?= form_error('harga', '<small class="text-danger pl-2">', '</small>') ?>
-            </div>
+            </div> -->
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -96,16 +97,24 @@
             </tr>
           </tfoot>
           <tbody>
-            <?php foreach ($pesanan as $p) : ?>
+            <?php
+            foreach ($pesanan as $p) :
+              if ($p['status'] == 1) {
+                $status = 'Lunas';
+              } else {
+                $status = 'Belum Lunas';
+              }
+            ?>
               <tr>
                 <td><?= $p['kode_transaksi'] ?></td>
                 <td><?= $p['username'] ?></td>
-                <td><?= $p['tanggal_order'] ?></td>
-                <td><?= $p['total'] ?></td>
-                <td>Lunas</td>
+                <td><?= date('d F Y', $p['tanggal_order']) ?></td>
+                <td>Rp. <?= $p['total'] ?></td>
+                <td><?= $status ?></td>
                 <td><a href="#" class="btn btn-primary">Detail</a></td>
               </tr>
-            <?php endforeach; ?>
+            <?php endforeach;
+            ?>
           </tbody>
         </table>
       </div>
