@@ -3,7 +3,7 @@
 
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Member</h1>
+    <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
     <button type="button" class="mt-2 d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#tambahMember"><i class="fas fa-download fa-sm text-white-50"></i> Tambah Member</button>
     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
       Launch static backdrop modal
@@ -109,23 +109,25 @@
             </tr>
           </tfoot>
           <tbody>
-            <tr>
-              <td>anandanurj</td>
-              <td>Ananda Nur Juliansyah</td>
-              <td>085257256782</td>
-              <td>Surabaya</td>
-              <td>04/03/2020</td>
-              <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detail">Detail</a></td>
-            </tr>
-            <tr>
-              <td>bayufajariyanto</td>
-              <td>Bayu Fajariyanto</td>
-              <td>083851350939</td>
-              <td>Pasuruan</td>
-              <td>04/03/2020</td>
-              <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detail">Detail</>
-              </td>
-            </tr>
+            <?php
+            foreach ($member as $m) :
+            ?>
+              <tr>
+                <td><?= $m['username']; ?></td>
+                <td><?= $m['nama']; ?></td>
+                <td><?= $m['telp']; ?></td>
+                <td><?= $m['alamat']; ?></td>
+                <td><?= date('d F Y', $m['date_created']); ?></td>
+                <td>
+                  <a href="<?= base_url() ?>admin/member_detail/<?= $m['id'] ?>" class="badge badge-primary badge-sm">Detail</a>
+                  <a href="<?= base_url() ?>admin/member_edit/<?= $m['id'] ?>" class="badge badge-success badge-sm">Edit</a>
+                  <a href="<?= base_url() ?>admin/member_hapus/<?= $m['id'] ?>" class="badge badge-danger badge-sm tombol-hapus">Hapus</a>
+                </td>
+              </tr>
+
+            <?php
+            endforeach;
+            ?>
           </tbody>
         </table>
       </div>
@@ -138,50 +140,20 @@
 
 </div>
 <!-- End of Main Content -->
-<!-- Modal -->
-<div class="modal fade" id="detail" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- Logout Modal-->
+<div class="modal fade" id="hapusmember" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Data Member</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <h5 class="modal-title" id="exampleModalLabel">Yakin Hapus Member?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="nama">Nama Lengkap</label>
-          <input type="text" class="form-control" name="nama" id="nama" readonly>
-        </div>
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" class="form-control" name="username" id="username" readonly>
-        </div>
-        <div class="form-group">
-          <label for="telp">No. Telepon</label>
-          <input type="number" class="form-control" name="telp" id="telp" readonly>
-        </div>
-        <div class="form-group">
-          <label for="kitas">Kartu Identitas</label>
-          <select class="form-control" id="kitas" name="kitas" readonly>
-            <option>KTP</option>
-            <option>KTM</option>
-            <option>SIM</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="nokitas">Nomor Identitas</label>
-          <input type="number" class="form-control" name="nokitas" id="nokitas" readonly>
-        </div>
-        <div class="form-group">
-          <label for="alamat">Alamat Identitas</label>
-          <input type="text" class="form-control" name="alamat" id="alamat" readonly>
-        </div>
-        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahMember">Edit</button> -->
-      </div>
+      <div class="modal-body">Pilih "Hapus" untuk menghapus "<?= $m['nama'] ?>".</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Oke</button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" href="<?= base_url('admin/member_hapus/' . $m['username']); ?>">Hapus</a>
       </div>
     </div>
   </div>
