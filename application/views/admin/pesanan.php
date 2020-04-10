@@ -3,7 +3,7 @@
 
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Pesanan</h1>
+    <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
     <button type="button" class="mt-2 d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#tambahPesanan"><i class="fas fa-download fa-sm text-white-50"></i> Tambah Pesanan</button>
   </div>
   <!-- Button trigger modal -->
@@ -14,7 +14,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Tambah Pesanan</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Tambah <?= $title ?></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -71,7 +71,7 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Data Member</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Data <?= $title ?></h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -111,7 +111,7 @@
                 <td><?= date('d F Y', $p['tanggal_order']) ?></td>
                 <td>Rp. <?= $p['total'] ?></td>
                 <td><?= $status ?></td>
-                <td><a href="#" class="btn btn-primary">Detail</a></td>
+                <td><a href="<?= base_url() ?>admin/pesanan_detail/<?=$p['id']?>" class="btn btn-primary">Detail</a></td>
               </tr>
             <?php endforeach;
             ?>

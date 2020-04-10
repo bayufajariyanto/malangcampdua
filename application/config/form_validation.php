@@ -162,6 +162,38 @@ $config = [
             ]
         ]
     ],
+    'barang_edit' => [
+        [
+            'field' => 'nama',
+            'label' => 'Nama Barang',
+            'rules' => 'trim|required|min_length[3]',
+            'errors' => [
+                'required' => '%s harus diisi',
+                'min_length' => '%s tidak kurang dari 3 huruf'
+            ]
+        ],
+        [
+            'field' => 'stok',
+            'label' => 'Stok Barang',
+            'rules' => 'trim|required|max_length[4]|integer',
+            'errors' => [
+                'required' => '%s harus diisi',
+                'max_length' => '%s tidak lebih dari 4 digit',
+                'integer' => '%s harus angka'
+            ]
+        ],
+        [
+            'field' => 'harga',
+            'label' => 'Harga Barang',
+            'rules' => 'trim|required|min_length[3]|max_length[10]|integer',
+            'errors' => [
+                'required' => '%s harus diisi',
+                'min_length' => '%s tidak kurang dari 3 digit',
+                'max_length' => '%s tidak lebih dari 10 digit',
+                'integer' => '%s harus angka'
+            ]
+        ]
+    ],
     'pesanan' => [
         [
             'field' => 'username',

@@ -11,6 +11,7 @@ class Member extends CI_Controller
         }else if($this->session->userdata('role_id') == null){
             redirect('auth');
         }
+        date_default_timezone_set('Asia/Jakarta');
     }
     public function index()
     {
