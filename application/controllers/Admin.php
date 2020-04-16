@@ -223,71 +223,90 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $data['username'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
         $data['pesanan'] = $this->db->get('pesanan')->result_array();
-        $data['barang'] = $this->db->get('barang')->result_array();
+
+        // load model
+        $this->load->model('Pesanan_model', 'barang');
+        $data['barang'] = $this->barang->getBarangStok();
+
         $username = $this->input->post('username');
         $id_barang = $this->input->post('barang');
         $jumlah = $this->input->post('jumlah');
+        $status = $this->input->post('status');
         $barang = $this->db->get_where('barang', ['id' => $id_barang])->row_array();
-        // var_dump($kategori['kategori']);
-        if ($this->form_validation->run('pesanan') == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar');
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('admin/pesanan');
-            $this->load->view('templates/footer');
+        $harga = $barang['harga'] * $jumlah;
+        // var_dump($total);
+        // if ($this->form_validation->run('pesanan') == false) {
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('admin/pesanan');
+        $this->load->view('templates/footer');
+        // } else {
+        // Pembuatan Kode Transaksi
+        $kategori = strtoupper(substr($barang['kategori'], 0, 3));
+        $tanggal = date('Ymd', time());
+        $angka = 1;
+        if ($angka < 10) {
+            $kode = $kategori . '-' . $tanggal . "000" . $angka;
+        } else if ($angka < 1000) {
+            $kode = $kategori . '-' . $tanggal . "00" . $angka;
+        } else if ($angka < 1000) {
+            $kode = $kategori . '-' . $tanggal . "0" . $angka;
         } else {
-            // Pembuatan Kode Transaksi
-            $kategori = strtoupper(substr($barang['kategori'], 0, 3));
-            $tanggal = date('Ymd', time());
-            $angka = 1;
-            if ($angka < 10) {
-                $kode = $kategori . '-' . $tanggal . "000" . $angka;
-            } else if ($angka < 1000) {
-                $kode = $kategori . '-' . $tanggal . "00" . $angka;
-            } else if ($angka < 1000) {
-                $kode = $kategori . '-' . $tanggal . "0" . $angka;
-            } else {
-                $kode = $kategori . '-' . $tanggal . $angka;
-            }
-            foreach ($data['pesanan'] as $p) {
-                if ($kode == $p['kode_transaksi']) {
-                    // $a = 'benar';
-                    $angka = $angka + 1;
-                    if ($angka < 10) {
-                        $kode = $kategori . '-' . $tanggal . "000" . $angka;
-                    } else if ($angka < 100) {
-                        $kode = $kategori . '-' . $tanggal . "00" . $angka;
-                    } else if ($angka < 1000) {
-                        $kode = $kategori . '-' . $tanggal . "0" . $angka;
-                    } else {
-                        $kode = $kategori . '-' . $tanggal . $angka;
-                    }
-                } else {
-                    // $a = 'salah';
-                    break;
-                }
-            }
-            // Akhir kode transaksi
-            $total = $barang['harga'];
-            if ($barang['stok'] < $jumlah) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Jumlah melebihi batas, stok hanya ' . $barang['stok'] . ' </div>');
-                redirect('admin/pesanan');
-            } else {
-                $stok = $barang['stok'] - $jumlah;
-                $data = [
-                    'stok' => $stok
-                ];
-                $pesanan = [
-                    'kode_transaksi' => $kode,
-                    'username' => $username
-                    // 'id_barang' => 
-                ];
-                $this->db->update('barang', $data, ['id' => $id_barang]);
-                // $this->db->update('pesanan', $pesanan);
-            }
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Transaksi ' . $kode . ' berhasil ditambahkan!</div>');
-            redirect('admin/pesanan');
+            $kode = $kategori . '-' . $tanggal . $angka;
         }
+        foreach ($data['pesanan'] as $p) {
+            $b = 'masuk';
+            if ($kode == $p['kode_transaksi']) {
+                $a = 'benar';
+                $angka++;
+                if ($angka < 10) {
+                    $kode = $kategori . '-' . $tanggal . "000" . $angka;
+                } else if ($angka < 100) {
+                    $kode = $kategori . '-' . $tanggal . "00" . $angka;
+                } else if ($angka < 1000) {
+                    $kode = $kategori . '-' . $tanggal . "0" . $angka;
+                } else {
+                    $kode = $kategori . '-' . $tanggal . $angka;
+                }
+            } else {
+                // $a = 'salah';
+                break;
+            }
+        }
+        // Akhir kode transaksi
+        $total = $barang['harga'];
+        if ($barang['stok'] < $jumlah) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Jumlah melebihi batas, stok hanya ' . $barang['stok'] . ' </div>');
+            redirect('admin/pesanan');
+        } else {
+            $stok = $barang['stok'] - $jumlah;
+            $data = [
+                'stok' => $stok
+            ];
+            $pesanan = [
+                'kode_transaksi' => $kode,
+                'username' => $username,
+                'id_barang' => $id_barang,
+                'tanggal_order' => time(),
+                'tanggal_sewa' => time(),
+                'tanggal_bayar' => time(),
+                'jumlah_barang' => $jumlah,
+                'total' => $harga,
+                'status' => $status,
+            ];
+            // $this->db->update('barang', $data, ['id' => $id_barang]);
+            // $this->db->insert('pesanan', $pesanan);
+        }
+        var_dump($angka);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Transaksi ' . $kode . ' berhasil ditambahkan!</div>');
+        // redirect('admin/pesanan');
+        // }
+    }
+
+    public function pesanan_batal($id)
+    {
+        
     }
 
     public function pesanan_detail($id)
@@ -295,11 +314,45 @@ class Admin extends CI_Controller
         $data['title'] = 'Detail Pesanan';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $data['username'] = $this->db->get_where('user', ['role_id' => 2])->row_array();
+        $this->load->model('Pesanan_model', 'barang');
         $data['pesanan'] = $this->db->get_where('pesanan', ['id' => $id])->row_array();
+        $idBarang = $data['pesanan']['id_barang'];
+        $usernama = $data['pesanan']['username'];
+        $data['barang'] = $this->barang->getBarangById($idBarang);
+        $data['nama'] = $this->db->get_where('user', ['username' => $usernama])->row_array();
+        if ($data['pesanan']['status'] == 1) {
+            $data['lunas'] = 'Lunas';
+        } else {
+            $data['lunas'] = 'Belum Lunas';
+        }
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
         $this->load->view('templates/topbar', $data);
         $this->load->view('admin/pesanan_detail');
+        $this->load->view('templates/footer');
+    }
+
+    public function peminjaman()
+    {
+        $data['title'] = 'Peminjaman';
+        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('admin/peminjaman');
+        $this->load->view('templates/footer');
+    }
+
+    public function peminjaman_detail()
+    {
+        $data['title'] = 'Peminjaman';
+        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('admin/peminjaman_detail');
         $this->load->view('templates/footer');
     }
 }

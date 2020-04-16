@@ -21,7 +21,7 @@
         </div>
 
         <?php
-        
+
         ?>
         <form method="post" action="<?= base_url('admin/pesanan'); ?>">
           <div class="modal-body">
@@ -33,16 +33,16 @@
             <div class="form-group">
               <label for="username">Username</label>
               <select class="form-control" id="username" name="username">
-              <?php foreach ($username as $u) : ?>
+                <?php foreach ($username as $u) : ?>
                   <option><?= $u['username'] ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
             <div class="form-group">
-              <label for="barang">Barang</label>
+              <label for="barang">Barang yang tersedia</label>
               <select class="form-control" id="barang" name="barang" size="5">
                 <?php foreach ($barang as $b) : ?>
-                  <option value="<?= $b['id']; ?>"><?= $b['nama'] ?></option>
+                  <option value="<?= $b['id']; ?>"><?= $b['nama'] ?> (<p>Rp. <?= $b['harga'] ?></p>) | <?= $b['stok'] ?> buah</option>
                 <?php endforeach; ?>
               </select>
             </div>
@@ -50,6 +50,13 @@
               <label for="jumlah">Jumlah Barang</label>
               <input type="text" class="form-control" name="jumlah" id="jumlah" value="<?= set_value('jumlah'); ?>" placeholder="Jumlah barang">
               <?= form_error('stok', '<small class="text-danger pl-2">', '</small>') ?>
+            </div>
+            <div class="form-group">
+              <label for="status">Bayar</label>
+              <select class="form-control" id="status" name="status">
+                  <option value="0">Belum Lunas</option>
+                  <option value="1">Lunas</option>
+              </select>
             </div>
             <!-- <div class="form-group">
               <label for="harga">Harga</label>
@@ -111,7 +118,7 @@
                 <td><?= date('d F Y', $p['tanggal_order']) ?></td>
                 <td>Rp. <?= $p['total'] ?></td>
                 <td><?= $status ?></td>
-                <td><a href="<?= base_url() ?>admin/pesanan_detail/<?=$p['id']?>" class="btn btn-primary">Detail</a></td>
+                <td><a href="<?= base_url() ?>admin/pesanan_detail/<?= $p['id'] ?>" class="btn btn-primary">Detail</a></td>
               </tr>
             <?php endforeach;
             ?>

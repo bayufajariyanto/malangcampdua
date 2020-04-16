@@ -152,7 +152,7 @@
       </div>
       <div class="modal-body">Pilih "Hapus" untuk menghapus "<?= $m['nama'] ?>".</div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Tutup</button>
         <a class="btn btn-primary" href="<?= base_url('admin/member_hapus/' . $m['username']); ?>">Hapus</a>
       </div>
     </div>
