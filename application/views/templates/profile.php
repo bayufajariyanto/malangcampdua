@@ -1,3 +1,11 @@
+<?php
+if ($this->session->userdata('role_id') == 2) {
+  $sesi = 'member';
+} else if ($this->session->userdata('role_id') == 1) {
+  $sesi = 'admin';
+}
+?>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -38,8 +46,8 @@
                     <p class="card-text text-muted">Member sejak <?= date('d F Y, H:i', $user['date_created']); ?></p>
                 </div>
             </div>
-            <br>
-            <a href="<?= base_url() ?>admin/member" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">Kembali</a>
+
+            <a href="<?= base_url($sesi) ?>" class="btn btn-primary">Kembali</a>
         </div>
     </div>
 

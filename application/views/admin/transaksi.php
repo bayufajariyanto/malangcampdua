@@ -39,7 +39,7 @@
             </tr>
           </tfoot>
           <tbody>
-            <?php foreach ($peminjaman as $p) :
+            <?php foreach ($transaksi as $p) :
               if ($p['status'] == 1) {
                 $status = 'Lunas';
               } else {
@@ -52,7 +52,7 @@
                 <td><?= date('d F Y', $p['tanggal_order']) ?></td>
                 <td>Rp. <?= $p['total'] ?></td>
                 <td><?= $status ?></td>
-                <td><a href="<?= base_url('admin/peminjaman_detail/'.$p['id']) ?>" class="btn btn-primary">Detail</a></td>
+                <td><a href="<?= base_url('admin/transaksi_detail/'.$p['id']) ?>" class="btn btn-primary">Detail</a></td>
               </tr>
             <?php endforeach; ?>
           </tbody>

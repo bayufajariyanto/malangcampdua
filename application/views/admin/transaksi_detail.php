@@ -1,3 +1,17 @@
+<?php
+if($transaksi['konfirmasi'] == 1){
+    $konfirmasi = 'Sudah dibayar';
+}else{
+    $konfirmasi = 'Belum dibayar';
+}
+
+if($transaksi['selesai'] == 1){
+    $selesai = 'Selesai';
+}else{
+    $selesai = 'Belum Selesai';
+}
+?>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -65,7 +79,7 @@
             <div class="row">
                 <p class="col-sm-2">Kode Transaksi</p>
                 <div class="col-sm-10">
-                    <h5 class="card-title"><?= $pesanan['kode_transaksi'] ?></h5>
+                    <h5 class="card-title"><?= $transaksi['kode_transaksi'] ?></h5>
                 </div>
             </div>
             <div class="row">
@@ -75,31 +89,80 @@
                 </div>
             </div>
             <div class="row">
-                <p class="col-sm-2">Barang</p>
+                <p class="col-sm-2">Tanggal Order</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><?= $barang['nama'] ?></p>
+                    <p class="card-text"><?= date('d F Y, H:i', $transaksi['tanggal_order']) ?></p>
                 </div>
             </div>
             <div class="row">
-                <p class="col-sm-2">Jumlah Barang</p>
+                <p class="col-sm-2">Tanggal Pembayaran</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><?= $pesanan['jumlah_barang'] ?></p>
+                    <p class="card-text"><?= date('d F Y, H:i', $transaksi['tanggal_bayar']) ?></p>
                 </div>
             </div>
-
-            <br>
             <div class="row">
-                <p class="col-sm-2">Total</p>
+                <p class="col-sm-2">Status Pembayaran</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><small class="text-muted">Rp. <?= $pesanan['total'] ?> <strong>(<?= $lunas ?>)</strong></small></p>
+                    <p class="card-text"><?= $konfirmasi ?></p>
+                </div>
+            </div>
+            <div class="row">
+                <p class="col-sm-2">Status Transaksi</p>
+                <div class="col-sm-10">
+                    <p class="card-text"><?= $selesai ?></p>
+                </div>
+            </div>
+<br>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nama Barang</th>
+                                <th>Tanggal Sewa</th>
+                                <th>Tanggal Akhir Sewa</th>
+                                <th>Tanggal Pengembalian</th>
+                                <th>Harga Per Hari</th>
+                                <th>Denda</th>
+                                <th>Total Bayar</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Nama Barang</th>
+                                <th>Tanggal Sewa</th>
+                                <th>Tanggal Akhir Sewa</th>
+                                <th>Tanggal Pengembalian</th>
+                                <th>Harga Per Hari</th>
+                                <th>Denda</th>
+                                <th>Total Bayar</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <?php
+                              if ($transaksi['status'] == 1) {
+                                $status = 'Lunas';
+                              } else {
+                                $status = 'Belum Lunas';
+                              }
+                            ?>
+                            <tr>
+                                <td>Ini Barang</td>
+                                <td><?= date('d F Y, H:i', $transaksi['tanggal_sewa']) ?></td>
+                                <td>ini tanggal akhir sewa</td>
+                                <td><?= date('d F Y, H:i', $transaksi['tanggal_kembali']) ?></td>
+                                <td>Rp <?= $transaksi['total'] ?></td>
+                                <td>Ini Denda</td>
+                                <td>Ini total</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <br><br>
-            <div class="text-center">
-                <a href="<?= base_url() ?>admin/pesanan" class="btn btn-sm btn-secondary">Kembali</a>
-                <a href="<?= base_url('admin/pesanan_konfirmasi/'.$pesanan['id']) ?>" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">Konfirmasi</a>
-                <a href="<?= base_url() ?>admin/pesanan_batal/<?= $pesanan['id'] ?>" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm tombol-batal">Batalkan</a>
-            </div>
+            <!-- <div class="text-center"> -->
+                <a href="<?= base_url() ?>admin/transaksi" class="btn btn-sm btn-secondary">Kembali</a>
+            <!-- </div> -->
         </div>
     </div>
 

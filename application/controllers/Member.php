@@ -23,4 +23,14 @@ class Member extends CI_Controller
         $this->load->view('member/index');
         $this->load->view('templates/footer');
     }
+
+    public function profile(){
+        $data['title'] = 'Profile';
+        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('templates/profile', $data);
+        $this->load->view('templates/footer');
+    }
 }

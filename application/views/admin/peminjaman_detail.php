@@ -1,3 +1,10 @@
+<?php
+if ($peminjaman['selesai'] == 0) {
+  $status = 'Berjalan';
+} else if ($peminjaman['selesai'] == 1) {
+  $status = 'Selesai';
+}
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -8,26 +15,50 @@
   <!-- Button trigger modal -->
   <?= $this->session->flashdata('message'); ?>
 
-  <div class="card w-75">
+  <div class="card w-100">
     <div class="card-body">
-      <h5 class="card-title">Data Peminjaman</h5>
-      <form method="post">
-        <div class="form-group row">
-
+      <br>
+      <div class="row">
+        <p class="col-sm-2">Kode Transaksi</p>
+        <div class="col-sm">
+          <h5 class="card-title"><?= $peminjaman['kode_transaksi'] ?></h5>
         </div>
-        <div class="form-group row">
-
+      </div>
+      <div class="row">
+        <p class="col-sm-2">Nama</p>
+        <div class="col-sm">
+          <p class="card-text"><?= $nama['nama'] ?></p>
         </div>
-        <div class="form-group row">
-
+      </div>
+      <div class="row">
+        <p class="col-sm-2">Tanggal Order</p>
+        <div class="col-sm">
+          <p class="card-text"><?= date('d F Y, H:i', $peminjaman['tanggal_order']) ?></p>
         </div>
-        <div class="form-group row">
-
+      </div>
+      <div class="row">
+        <p class="col-sm-2">Total Pembayaran</p>
+        <div class="col-sm">
+          <p class="card-text">Rp. <?= $peminjaman['total'] ?></p>
         </div>
-
-        <a href="<?= base_url('admin/peminjaman') ?>" class="btn btn-secondary">Kembali</a>
-        <button type="submit" class="btn btn-primary">Simpan</button>
-      </form>
+      </div>
+      <div class="row">
+        <p class="col-sm-2">Tanggal Pembayaran</p>
+        <div class="col-sm">
+          <p class="card-text"><?= date('d F Y, H:i', $peminjaman['tanggal_bayar']) ?></p>
+        </div>
+      </div>
+      <div class="row">
+        <p class="col-sm-2">Status Transaksi</p>
+        <div class="col-sm">
+          <p class="card-text"><?= $status ?></p>
+        </div>
+      </div>
+      <br><br>
+      <div class="text-center">
+        <a href="<?= base_url('admin/peminjaman') ?>" class="d-sm-inline-block btn btn-sm btn-secondary shadow-sm">Kembali</a>
+        <a href="<?= base_url() ?>admin/peminjaman_selesai/<?= $peminjaman['id'] ?>" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">Selesai</a>
+      </div>
     </div>
   </div>
 
