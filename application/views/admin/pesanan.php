@@ -1,3 +1,10 @@
+<?php 
+foreach($pesanan as $p):
+  if($p['tanggal_order']+$sejam<time()):
+      redirect('admin/pesanan_batal/'.$p['id']);
+  endif;
+endforeach;
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
 

@@ -238,10 +238,11 @@ class Admin extends CI_Controller
         $data['kategori'] = $this->db->get('kategori')->result_array();
         $data['sejam'] = 60*60*1;
         // var_dump($data['pesanan']);
-        if($data['pesanan']):
-
-        endif;
-
+        // foreach($data['pesanan'] as $p):
+        //     if($p['tanggal_order']+$data['sejam']<time()):
+        //         redirect('admin/pesanan_batal/.$p[$id]');
+        //     endif;
+        // endforeach;
         // load model
         $this->load->model('Pesanan_model', 'barang');
         $data['barang'] = $this->barang->getBarangStok();
@@ -249,6 +250,8 @@ class Admin extends CI_Controller
         $username = $this->input->post('username');
         $id_barang = $this->input->post('barang');
         $jumlah = $this->input->post('jumlah');
+        $sewa = $this->input->post('sewa');
+        $hari = $this->input->post('hari');
         $status = $this->input->post('status');
         $barang = $this->db->get_where('barang', ['id' => $id_barang])->row_array();
         $harga = $barang['harga'] * $jumlah;
@@ -293,6 +296,24 @@ class Admin extends CI_Controller
                 }
             }
             // Akhir kode transaksi
+            $jam_bayar = 0;
+            if($status == 1){
+                $jam_bayar = time();
+            }
+            $sewa = explode(':', $sewa);
+            $jam = (int) $sewa[0];
+            $menit = (int) $sewa[1];
+            $jam_sewa = mktime($jam,$menit,(int)date('s'),(int)date('m'),(int)date('d'),(int)date('Y'));
+var_dump($jam);
+var_dump($menit);
+var_dump((int)date('s'));
+var_dump((int)date('m'));
+var_dump((int)date('d'));
+var_dump((int)date('Y'));
+$jam_kembali = $jam_sewa+(60*60*24*$hari);
+var_dump($jam_kembali);
+// die;
+
             $total = $barang['harga'];
             if ($barang['stok'] < $jumlah) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Jumlah melebihi batas, stok hanya ' . $barang['stok'] . ' </div>');
@@ -307,8 +328,9 @@ class Admin extends CI_Controller
                     'username' => $username,
                     'id_barang' => $id_barang,
                     'tanggal_order' => time(),
-                    'tanggal_sewa' => time(),
-                    'tanggal_bayar' => time(),
+                    'tanggal_sewa' => $jam_sewa,
+                    'tanggal_kembali' => $jam_kembali,
+                    'tanggal_bayar' => $jam_bayar,
                     'jumlah_barang' => $jumlah,
                     'total' => $harga,
                     'status' => $status,
