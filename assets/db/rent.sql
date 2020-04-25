@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2020 at 02:49 AM
+-- Generation Time: Apr 03, 2020 at 12:31 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -57,7 +57,7 @@ INSERT INTO `barang` (`id`, `nama`, `kategori`, `harga`, `stok`) VALUES
 (16, 'Jacket', 'Jacket', 10000, 3),
 (17, 'Flysheet', 'Other', 7500, 3),
 (18, 'Sarung Tangan Polar', 'Other', 4000, 3),
-(19, 'Kompor Lapang', 'Cooking Set', 5000, 2),
+(19, 'Kompor Lapang', 'Cooking Set', 5000, 3),
 (20, 'Nesting / Panci', 'Cooking Set', 5000, 3),
 (21, 'Sleeping Bag', 'Other', 5000, 3),
 (22, 'Trekking Pole', 'Other', 6000, 3),
@@ -65,46 +65,9 @@ INSERT INTO `barang` (`id`, `nama`, `kategori`, `harga`, `stok`) VALUES
 (24, 'Gaiter', 'Other', 4000, 3),
 (25, 'Headlamp / Senter', 'Lighting', 4000, 3),
 (26, 'Lampu Tenda', 'Lighting', 4000, 3),
-(27, 'Jerigen Lipat 5L', 'Other', 3000, 2),
+(27, 'Jerigen Lipat 5L', 'Other', 3000, 3),
 (28, 'Kompas', 'Other', 2500, 3),
 (29, 'Pisau Lipat', 'Other', 2500, 3);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `kategori`
---
-
-CREATE TABLE `kategori` (
-  `id` int(11) NOT NULL,
-  `nama` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `kategori`
---
-
-INSERT INTO `kategori` (`id`, `nama`) VALUES
-(1, 'Carrier'),
-(2, 'Cooking Set'),
-(3, 'Jacket'),
-(4, 'Lighting'),
-(5, 'Other'),
-(6, 'Sandal'),
-(7, 'Sepatu'),
-(8, 'Tenda');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `menu`
---
-
-CREATE TABLE `menu` (
-  `id` int(11) NOT NULL,
-  `kategori` int(11) NOT NULL,
-  `id_role` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -119,22 +82,19 @@ CREATE TABLE `pesanan` (
   `id_barang` int(11) NOT NULL,
   `tanggal_order` bigint(20) NOT NULL,
   `tanggal_sewa` bigint(20) NOT NULL,
-  `tanggal_kembali` bigint(20) NOT NULL,
   `tanggal_bayar` bigint(20) NOT NULL,
   `jumlah_barang` int(11) NOT NULL,
   `total` bigint(20) NOT NULL,
-  `status` int(11) NOT NULL,
-  `konfirmasi` int(11) NOT NULL,
-  `selesai` int(11) NOT NULL
+  `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `pesanan`
 --
 
-INSERT INTO `pesanan` (`id`, `kode_transaksi`, `username`, `id_barang`, `tanggal_order`, `tanggal_sewa`, `tanggal_kembali`, `tanggal_bayar`, `jumlah_barang`, `total`, `status`, `konfirmasi`, `selesai`) VALUES
-(15, 'COO-202004220001', 'anandanurj', 19, 1587565327, 1587565512, 0, 1587565512, 1, 5000, 1, 1, 1),
-(16, 'OTH-202004250001', 'bayufajariyanto', 27, 1587775207, 1587775087, 0, 1587775243, 1, 3000, 1, 1, 1);
+INSERT INTO `pesanan` (`id`, `kode_transaksi`, `username`, `id_barang`, `tanggal_order`, `tanggal_sewa`, `tanggal_bayar`, `jumlah_barang`, `total`, `status`) VALUES
+(1, 'TRN-202004030001', 'bayufajariyanto', 6, 1585883231, 1585883231, 1585883231, 1, 30000, 1),
+(2, 'TRN-202004030002', 'anandanurj', 6, 1585883231, 1585883231, 1585883231, 1, 30000, 1);
 
 -- --------------------------------------------------------
 
@@ -181,8 +141,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `username`, `password`, `nama`, `no_kitas`, `jenis_kitas`, `alamat`, `telp`, `date_created`, `role_id`) VALUES
 (1, 'admin', '1234', 'Admin', '', '', '', '', 1585144105, 1),
 (4, 'bayufajariyanto', '$2y$10$UrJvWuSHG.ZhRWNvOLw4jOh/Y08Wt5/mEl.OEwvpFi2ZByWjpLC0G', 'Bayu Fajariyanto', '1731710033', 'KTM', 'Pasuruan Jawa Timur', '083851350939', 1585816190, 2),
-(5, 'anandanurj', '$2y$10$NJC78efYLrEq5Y.tTASfFO3gMZq1o38lIiHis6qhsBw6d8uSkqh2m', 'Ananda Nur Juliansyah', '1731710100', 'KTM', 'Surabaya Jawa Timur', '085257256782', 1585830779, 2),
-(6, 'dellyagus', '$2y$10$Wc0wJYhiGm9fJ0gPa5qbpeP7XEnjMKMmjdl2oSYzBU1IKnY/q9gWa', 'Delly Agus Prasetyo', '1731710174', 'KTP', 'Pujon, Jawa Timur', '085964112370', 1586486110, 2);
+(5, 'anandanurj', '$2y$10$NJC78efYLrEq5Y.tTASfFO3gMZq1o38lIiHis6qhsBw6d8uSkqh2m', 'Ananda Nur Juliansyah', '1731710100', 'KTM', 'Surabaya Jawa Timur', '085257256782', 1585830779, 2);
 
 --
 -- Indexes for dumped tables
@@ -192,12 +151,6 @@ INSERT INTO `user` (`id`, `username`, `password`, `nama`, `no_kitas`, `jenis_kit
 -- Indexes for table `barang`
 --
 ALTER TABLE `barang`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `kategori`
---
-ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -229,16 +182,10 @@ ALTER TABLE `barang`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT for table `kategori`
---
-ALTER TABLE `kategori`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -250,7 +197,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

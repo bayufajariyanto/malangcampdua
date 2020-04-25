@@ -1,8 +1,3 @@
-<?php
-$sejam = 60*60;
-
-?>
-
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -46,39 +41,16 @@ $sejam = 60*60;
             <div class="form-group">
               <label for="barang">Barang yang tersedia</label>
               <select class="form-control" id="barang" name="barang" size="5">
-              <?php foreach($kategori as $k): 
-                echo $k['nama'];
-                ?>
-                <optgroup label="<?= $k['nama'] ?>">
-                <?php foreach ($barang as $b) : 
-                  if($b['kategori'] == $k['nama']):
-                    ?>
-                    <option value="<?= $b['id']; ?>"><?= $b['nama'] ?> (<p>Rp. <?= $b['harga'] ?></p>) | <?= $b['stok'] ?> buah</option>
-                <?php 
-                endif;
-              endforeach; ?>
-              </optgroup>
-              
-              <?php endforeach; ?>
+                <?php foreach ($barang as $b) : ?>
+                  <option value="<?= $b['id']; ?>"><?= $b['nama'] ?> (<p>Rp. <?= $b['harga'] ?></p>) | <?= $b['stok'] ?> buah</option>
+                <?php endforeach; ?>
               </select>
-            </div>
-            <div class="form-group">
-              <label for="sewa">Jam Sewa</label>
-              <input type="time" class="form-control" min="<?= date('H:i') ?>" max="<?= date('H:i', time()+$sejam) ?>" name="sewa" id="sewa" value="<?= date('H:i'); ?>">
-              <?= form_error('sewa', '<small class="text-danger pl-1">', '</small>') ?>
             </div>
             <div class="form-group">
               <label for="jumlah">Jumlah Barang</label>
               <input type="text" class="form-control" name="jumlah" id="jumlah" value="<?= set_value('jumlah'); ?>" placeholder="Jumlah barang">
-              <?= form_error('jumlah', '<small class="text-danger pl-1">', '</small>') ?>
+              <?= form_error('stok', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
-            
-            <div class="form-group">
-              <label for="hari">Lama (Hari)</label>
-              <input type="text" class="form-control" name="hari" id="hari" value="<?= set_value('hari'); ?>" placeholder="Berapa hari?">
-              <?= form_error('hari', '<small class="text-danger pl-1">', '</small>') ?>
-            </div>
-
             <div class="form-group">
               <label for="status">Bayar</label>
               <select class="form-control" id="status" name="status">

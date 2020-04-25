@@ -31,9 +31,13 @@
             <div class="form-group">
               <label for="kategori">Kategori</label>
               <select class="form-control" id="kategori" name="kategori">
-              <?php foreach($kategori as $k): ?>
-                <option><?= $k['nama'] ?></option>
-              <?php endforeach; ?>
+                <option>Carrier</option>
+                <option>Coocking Set</option>
+                <option>Jaket</option>
+                <option>Lighting</option>
+                <option>Other</option>
+                <option>Sandal</option>
+                <option>Tenda</option>
               </select>
             </div>
             <div class="form-group">
