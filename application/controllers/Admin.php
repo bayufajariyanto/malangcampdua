@@ -166,6 +166,7 @@ class Admin extends CI_Controller
         $data['title'] = 'Barang';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $data['barang'] = $this->db->get_where('barang')->result_array();
+        $data['kategori'] = $this->db->get_where('kategori')->result_array();
 
         $nama = ucwords($this->input->post('nama'));
         $kategori = $this->input->post('kategori');
@@ -234,6 +235,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $data['username'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
         $data['pesanan'] = $this->db->get_where('pesanan', ['konfirmasi' => 0])->result_array();
+        $data['kategori'] = $this->db->get('kategori')->result_array();
 
         // load model
         $this->load->model('Pesanan_model', 'barang');
