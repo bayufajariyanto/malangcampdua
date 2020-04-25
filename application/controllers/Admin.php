@@ -166,7 +166,7 @@ class Admin extends CI_Controller
         $data['title'] = 'Barang';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $data['barang'] = $this->db->get_where('barang')->result_array();
-        $data['kategori'] = $this->db->get_where('kategori')->result_array();
+        $data['kategori'] = $this->db->get('kategori')->result_array();
 
         $nama = ucwords($this->input->post('nama'));
         $kategori = $this->input->post('kategori');
@@ -236,6 +236,11 @@ class Admin extends CI_Controller
         $data['username'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
         $data['pesanan'] = $this->db->get_where('pesanan', ['konfirmasi' => 0])->result_array();
         $data['kategori'] = $this->db->get('kategori')->result_array();
+        $data['sejam'] = 60*60*1;
+        // var_dump($data['pesanan']);
+        if($data['pesanan']):
+
+        endif;
 
         // load model
         $this->load->model('Pesanan_model', 'barang');
@@ -319,10 +324,14 @@ class Admin extends CI_Controller
 
     public function pesanan_batal($id)
     {
+        $pesanan = $this->db->get_where('pesanan', ['id' => $id, 'status' => 0])->row_array();
+        $barang = $this->db->get_where('barang', ['id' => $pesanan['id_barang']])->row_array();
+        $stok = $pesanan['jumlah_barang']+$barang['stok'];
+        // $pesanan['']
         $data = [
-            'status' => 1,
-            'konfirmasi' => 1
+            'stok' => $stok
         ];
+        $this->db->update('barang', $data, ['id' => $pesanan['id_barang']]);
         $this->db->delete('pesanan', ['id' => $id]);
         redirect('admin/pesanan');
     }
