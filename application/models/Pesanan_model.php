@@ -12,4 +12,16 @@ class Pesanan_model extends CI_Model
         $query = "SELECT * FROM barang WHERE `id` = $id";
         return $this->db->query($query)->row_array();
     }
+
+    public function getBarangByKeyword($keyword){
+        $query = "SELECT * FROM barang WHERE
+        nama LIKE '%$keyword%' OR
+        kategori LIKE '%$keyword%'";
+        return $this->db->query($query)->result_array();
+    }
+    public function getKategoriByKeyword($keyword){
+        $query = "SELECT * FROM kategori WHERE
+        nama LIKE '%$keyword%'";
+        return $this->db->query($query)->result_array();
+    }
 }

@@ -229,6 +229,17 @@ class Admin extends CI_Controller
         redirect('admin/barang');
     }
 
+    public function ajax($keyword){
+        // var_dump(strlen($keyword));die;
+        $data['keyword'] = $keyword;
+        $this->load->model('Pesanan_model', 'barang');
+        $data['barang'] = $this->barang->getBarangByKeyword($keyword);
+        $data['kategori'] = $this->barang->getKategoriByKeyword($keyword);
+        $this->load->view('ajax/index',$data);
+    }
+
+
+
     public function pesanan()
     {
         $data['title'] = 'Pesanan';
@@ -254,7 +265,6 @@ class Admin extends CI_Controller
         $hari = $this->input->post('hari');
         $status = $this->input->post('status');
         $barang = $this->db->get_where('barang', ['id' => $id_barang])->row_array();
-        $harga = $barang['harga'] * $jumlah;
         // var_dump($total);
         if ($this->form_validation->run('pesanan') == false) {
             $this->load->view('templates/header', $data);
@@ -263,13 +273,14 @@ class Admin extends CI_Controller
             $this->load->view('admin/pesanan');
             $this->load->view('templates/footer');
         } else {
+            $harga = $barang['harga'] * $jumlah;
             // Pembuatan Kode Transaksi
             $kategori = strtoupper(substr($barang['kategori'], 0, 3));
             $tanggal = date('Ymd', time());
             $angka = 1;
             if ($angka < 10) {
                 $kode = $kategori . '-' . $tanggal . "000" . $angka;
-            } else if ($angka < 1000) {
+            } else if ($angka < 100) {
                 $kode = $kategori . '-' . $tanggal . "00" . $angka;
             } else if ($angka < 1000) {
                 $kode = $kategori . '-' . $tanggal . "0" . $angka;
@@ -304,16 +315,7 @@ class Admin extends CI_Controller
             $jam = (int) $sewa[0];
             $menit = (int) $sewa[1];
             $jam_sewa = mktime($jam,$menit,(int)date('s'),(int)date('m'),(int)date('d'),(int)date('Y'));
-var_dump($jam);
-var_dump($menit);
-var_dump((int)date('s'));
-var_dump((int)date('m'));
-var_dump((int)date('d'));
-var_dump((int)date('Y'));
-$jam_kembali = $jam_sewa+(60*60*24*$hari);
-var_dump($jam_kembali);
-// die;
-
+            $jam_kembali = $jam_sewa+(60*60*24*$hari);
             $total = $barang['harga'];
             if ($barang['stok'] < $jumlah) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Jumlah melebihi batas, stok hanya ' . $barang['stok'] . ' </div>');
