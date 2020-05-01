@@ -449,4 +449,38 @@ class Admin extends CI_Controller
         $this->load->view('admin/transaksi_detail');
         $this->load->view('templates/footer');
     }
+
+    public function kode_transaksi(){
+        $data['pesanan']=$this->db->get('pesanan')->result_array();
+        $kategori = $this->input->post('kategori');
+        $this->form_validation->set_rules('kategori', 'Kategori','required');
+        if($this->form_validation->run() == false){
+            
+            $this->load->view('kode',$data);
+        }else{
+            $kode = $kategori."-".date("Ymd");
+            $dt = [
+                'kode' => $kode
+            ];
+            $this->db->insert('kode_transaksi', $dt);
+            $urut = (int)substr($kode, -4,4);
+            if($urut<10){
+                echo "urut kurang dari 10";
+            }else if($urut<100){
+                echo "urut kurang dari 100";
+                
+            }else if($urut<1000){
+                echo "urut kurang dari 1000";
+                
+            }else if($urut<10000){
+                echo "urut kurang dari 10000";
+
+            }
+
+            var_dump($dt);
+            $this->load->view('kode',$data);
+
+            // redirect('admin/kode_transaksi');
+        }
+    }
 }

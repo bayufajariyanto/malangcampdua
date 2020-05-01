@@ -89,25 +89,25 @@
             <div class="row">
                 <p class="col-sm-2">Tanggal Order</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><?= $pesanan['tanggal_order'] ?></p>
+                    <p class="card-text"><?= date('d F Y | H:i:s', $pesanan['tanggal_order']) ?></p>
                 </div>
             </div>
             <div class="row">
                 <p class="col-sm-2">Tanggal Sewa</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><?= $pesanan['tanggal_sewa'] ?></p>
+                    <p class="card-text"><?= date('d F Y | H:i:s', $pesanan['tanggal_sewa']) ?></p>
                 </div>
             </div>
             <div class="row">
                 <p class="col-sm-2">Tanggal Kembali</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><?= $pesanan['tanggal_kembali'] ?></p>
+                    <p class="card-text"><?= date('d F Y | H:i:s', $pesanan['tanggal_kembali']) ?></p>
                 </div>
             </div>
             <div class="row">
                 <p class="col-sm-2">Tanggal Bayar</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><?= $pesanan['tanggal_bayar'] ?></p>
+                    <p class="card-text"><?= date('d F Y | H:i:s', $pesanan['tanggal_bayar']) ?></p>
                 </div>
             </div>
 
