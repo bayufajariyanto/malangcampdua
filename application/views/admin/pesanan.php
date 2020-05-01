@@ -1,8 +1,13 @@
-<?php
-$sejam = 60*60;
-
+<?php 
+foreach($pesanan as $p):
+  if($p['tanggal_order']+$sejam<time() && $p['status'] != 1){
+    redirect(base_url('admin/pesanan_batal/'.$p['id']));
+  }
+  if($p['tanggal_sewa'] <= time() && $p['status'] == 1){
+    redirect(base_url('admin/pesanan_konfirmasi/'.$p ['id']));
+  }
+endforeach;
 ?>
-
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -45,40 +50,38 @@ $sejam = 60*60;
             </div>
             <div class="form-group">
               <label for="barang">Barang yang tersedia</label>
-              <select class="form-control" id="barang" name="barang" size="5">
-              <?php foreach($kategori as $k): 
-                echo $k['nama'];
-                ?>
+              <input type="text" class="form-control" name="keyword" id="keyword" placeholder="Masukkan keyword ...">
+              <div id="konten">
+                <select class="form-control" id="barang" name="barang" size="5">
+                <?php foreach($kategori as $k): ?>
                 <optgroup label="<?= $k['nama'] ?>">
-                <?php foreach ($barang as $b) : 
-                  if($b['kategori'] == $k['nama']):
+                  <?php foreach ($barang as $b) : 
+                    if($b['kategori'] == $k['nama']):
                     ?>
                     <option value="<?= $b['id']; ?>"><?= $b['nama'] ?> (<p>Rp. <?= $b['harga'] ?></p>) | <?= $b['stok'] ?> buah</option>
-                <?php 
-                endif;
-              endforeach; ?>
-              </optgroup>
-              
-              <?php endforeach; ?>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="sewa">Jam Sewa</label>
-              <input type="time" class="form-control" min="<?= date('H:i') ?>" max="<?= date('H:i', time()+$sejam) ?>" name="sewa" id="sewa" value="<?= date('H:i'); ?>">
-              <?= form_error('sewa', '<small class="text-danger pl-1">', '</small>') ?>
+                  <?php 
+                    endif;
+                  endforeach; ?>
+                </optgroup>
+                <?php endforeach; ?>
+                </select>
+              </div>
             </div>
             <div class="form-group">
               <label for="jumlah">Jumlah Barang</label>
               <input type="text" class="form-control" name="jumlah" id="jumlah" value="<?= set_value('jumlah'); ?>" placeholder="Jumlah barang">
-              <?= form_error('jumlah', '<small class="text-danger pl-1">', '</small>') ?>
+              <?= form_error('jumlah', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
-            
             <div class="form-group">
-              <label for="hari">Lama (Hari)</label>
-              <input type="text" class="form-control" name="hari" id="hari" value="<?= set_value('hari'); ?>" placeholder="Berapa hari?">
-              <?= form_error('hari', '<small class="text-danger pl-1">', '</small>') ?>
+              <label for="sewa">Jam Sewa</label>
+              <input type="time" class="form-control" min="<?= date("H:i") ?>" max="<?= date("H:i", time()+$sejam) ?>" name="sewa" id="sewa" value="<?= date("H:i") ?>">
+              <?= form_error('sewa', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
-
+            <div class="form-group">
+              <label for="hari">Lama <strong>(hari)</strong></label>
+              <input type="text" class="form-control" name="hari" id="hari" value="<?= set_value('hari'); ?>" placeholder="Jumlah hari">
+              <?= form_error('hari', '<small class="text-danger pl-2">', '</small>') ?>
+            </div>
             <div class="form-group">
               <label for="status">Bayar</label>
               <select class="form-control" id="status" name="status">
@@ -162,3 +165,33 @@ $sejam = 60*60;
 
 </div>
 <!-- End of Main Content -->
+
+<script>
+var keyword = document.getElementById('keyword');
+var konten = document.getElementById('konten');
+// Event ketika keyword ditulis
+keyword.addEventListener('keyup', function () {
+
+  // buat objek ajax
+  var xhr = new XMLHttpRequest();
+
+  // cek kesiapan ajax
+  xhr.onreadystatechange = function(){
+    if(xhr.readyState == 4 && xhr.status == 200){
+      konten.innerHTML = xhr.responseText;
+    }else if(xhr.status == 500){
+      konten.innerHTML = '<select class="form-control" id="barang" name="barang" size="5"><?php foreach($kategori as $k): ?>
+                <optgroup label="<?= $k['nama'] ?>"><?php foreach ($barang as $b) :if($b['kategori'] == $k['nama']):
+                    ?>
+                    <option value="<?= $b['id']; ?>"><?= $b['nama'] ?> (<p>Rp. <?= $b['harga'] ?></p>) | <?= $b['stok'] ?> buah</option><?php endif;endforeach; ?>
+                </optgroup><?php endforeach; ?>
+                </select>';
+    }
+  }
+
+  xhr.open('GET', 'ajax/'+keyword.value, true);
+  // eksekusi ajax
+  xhr.send();
+
+});
+</script>

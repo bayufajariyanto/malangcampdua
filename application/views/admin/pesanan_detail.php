@@ -1,3 +1,11 @@
+<?php 
+if($pesanan['tanggal_bayar']>1){
+    $tbayar = date('d F Y | H:i:s', $pesanan['tanggal_bayar']);
+}else{
+    $tbayar = '-';
+}
+?>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -107,7 +115,7 @@
             <div class="row">
                 <p class="col-sm-2">Tanggal Bayar</p>
                 <div class="col-sm-10">
-                    <p class="card-text"><?= date('d F Y | H:i:s', $pesanan['tanggal_bayar']) ?></p>
+                    <p class="card-text"><?= $tbayar; ?></p>
                 </div>
             </div>
 

@@ -241,11 +241,12 @@ class Admin extends CI_Controller
         // load model
         $this->load->model('Pesanan_model', 'barang');
         $data['barang'] = $this->barang->getBarangStok();
-
+        $data['sejam'] = 60*60;
         $username = $this->input->post('username');
         $id_barang = $this->input->post('barang');
         $jumlah = $this->input->post('jumlah');
         $status = $this->input->post('status');
+        $hari = $this->input->post('hari');
         $tsewa = $this->input->post('sewa');
         $barang = $this->db->get_where('barang', ['id' => $id_barang])->row_array();
         $tbayar = 0;
@@ -312,7 +313,13 @@ class Admin extends CI_Controller
             endforeach;
             // var_dump($barang['stok']);die;
             // Akhir kode transaksi
+            $jam_sewa = mktime($jam,$menit,(int)date('s'),(int)date('m'),(int)date('d'),(int)date('Y'));
+            $jam_kembali = $jam_sewa+(60*60*24*$hari);
             $total = $barang['harga'];
+            if($id_barang == null){
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Pilih barang yang mau disewa!</div>');
+                redirect('admin/pesanan');
+            }else
             if ($barang['stok'] < $jumlah) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Jumlah melebihi batas, stok hanya ' . $barang['stok'] . ' </div>');
                 redirect('admin/pesanan');
@@ -326,7 +333,8 @@ class Admin extends CI_Controller
                     'username' => $username,
                     'id_barang' => $id_barang,
                     'tanggal_order' => time(),
-                    'tanggal_sewa' => mktime($jam,$menit,(int)date('s'),(int)date('m'),(int)date('d'),(int)date('Y')),
+                    'tanggal_sewa' => $jam_sewa,
+                    'tanggal_kembali' => $jam_kembali,
                     'tanggal_bayar' => $tbayar,
                     'jumlah_barang' => $jumlah,
                     'total' => $harga,
@@ -482,5 +490,14 @@ class Admin extends CI_Controller
 
             // redirect('admin/kode_transaksi');
         }
+    }
+
+    public function ajax($keyword){
+        // var_dump($keyword);die;
+        $data['keyword'] = $keyword;
+        $this->load->model('Pesanan_model', 'barang');
+        $data['barang'] = $this->barang->getBarangByKeyword($keyword);
+        $data['kategori'] = $this->barang->getKategoriByKeyword($keyword);
+        $this->load->view('ajax/index',$data);
     }
 }
