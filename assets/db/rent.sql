@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2020 at 02:49 AM
+-- Generation Time: Apr 25, 2020 at 11:12 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -50,15 +50,15 @@ INSERT INTO `barang` (`id`, `nama`, `kategori`, `harga`, `stok`) VALUES
 (8, 'Tenda Great Outdoor Kap 6-8 org', 'Tenda', 35000, 3),
 (9, 'Tas Carrier 70-80 L', 'Carrier', 12500, 3),
 (10, 'Tas Carrier 60 L', 'Carrier', 10000, 3),
-(12, 'Cover Bag', 'Other', 2500, 3),
+(12, 'Cover Bag', 'Other', 2500, 2),
 (13, 'Sepatu Trekking', 'Sepatu', 15000, 3),
 (14, 'Sandal Trekking', 'Sandal', 5000, 3),
 (15, 'Hammock', 'Other', 5000, 3),
-(16, 'Jacket', 'Jacket', 10000, 3),
+(16, 'Jacket', 'Jacket', 10000, 0),
 (17, 'Flysheet', 'Other', 7500, 3),
 (18, 'Sarung Tangan Polar', 'Other', 4000, 3),
 (19, 'Kompor Lapang', 'Cooking Set', 5000, 2),
-(20, 'Nesting / Panci', 'Cooking Set', 5000, 3),
+(20, 'Nesting / Panci', 'Cooking Set', 5000, 2),
 (21, 'Sleeping Bag', 'Other', 5000, 3),
 (22, 'Trekking Pole', 'Other', 6000, 3),
 (23, 'Matras', 'Other', 2500, 3),
@@ -67,7 +67,7 @@ INSERT INTO `barang` (`id`, `nama`, `kategori`, `harga`, `stok`) VALUES
 (26, 'Lampu Tenda', 'Lighting', 4000, 3),
 (27, 'Jerigen Lipat 5L', 'Other', 3000, 2),
 (28, 'Kompas', 'Other', 2500, 3),
-(29, 'Pisau Lipat', 'Other', 2500, 3);
+(29, 'Pisau Lipat', 'Other', 2500, 0);
 
 -- --------------------------------------------------------
 
@@ -134,7 +134,10 @@ CREATE TABLE `pesanan` (
 
 INSERT INTO `pesanan` (`id`, `kode_transaksi`, `username`, `id_barang`, `tanggal_order`, `tanggal_sewa`, `tanggal_kembali`, `tanggal_bayar`, `jumlah_barang`, `total`, `status`, `konfirmasi`, `selesai`) VALUES
 (15, 'COO-202004220001', 'anandanurj', 19, 1587565327, 1587565512, 0, 1587565512, 1, 5000, 1, 1, 1),
-(16, 'OTH-202004250001', 'bayufajariyanto', 27, 1587775207, 1587775087, 0, 1587775243, 1, 3000, 1, 1, 1);
+(16, 'OTH-202004250001', 'bayufajariyanto', 27, 1587775207, 1587775087, 0, 1587775243, 1, 3000, 1, 1, 1),
+(17, 'OTH-202004250001', 'bayufajariyanto', 12, 1587778430, 1587778430, 0, 1587778440, 1, 2500, 1, 1, 1),
+(21, 'JAC-202004250001', 'bayufajariyanto', 16, 1587801777, 1587805377, 0, 0, 3, 30000, 0, 0, 0),
+(22, 'COO-202004250001', 'bayufajariyanto', 20, 1587802655, 1587805235, 1588064435, 0, 1, 5000, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -238,7 +241,7 @@ ALTER TABLE `kategori`
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `role`
