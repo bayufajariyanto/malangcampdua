@@ -4,6 +4,19 @@ if ($peminjaman['selesai'] == 0) {
 } else if ($peminjaman['selesai'] == 1) {
   $status = 'Selesai';
 }
+$sehari = 60*60*24;
+$batas = '';
+// var_dump
+if($peminjaman['tanggal_kembali']< time()){
+  $hariTerlambat = (int)ceil((time()-$peminjaman['tanggal_kembali'])/$sehari);
+  $batas = 'Terlambat '.$hariTerlambat.' hari';
+  $denda = ($peminjaman['total']*$hariTerlambat);
+  // $total = $denda+$peminjaman['total'];
+  // var_dump();die;
+}else{
+  $batas = 'Belum Terlambat';
+  $denda = 0;
+}
 ?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -58,6 +71,18 @@ if ($peminjaman['selesai'] == 0) {
         <p class="col-sm-2">Tanggal Pembayaran</p>
         <div class="col-sm">
           <p class="card-text"><?= date('d F Y, H:i:s', $peminjaman['tanggal_bayar']) ?></p>
+        </div>
+      </div>
+      <div class="row">
+        <p class="col-sm-2">Batas Pengembalian</p>
+        <div class="col-sm">
+          <p class="card-text"><?= date('d F Y, H:i', $peminjaman['tanggal_kembali']) ?> <strong class="text-danger">(<?= $batas ?>)</strong></p>
+        </div>
+      </div>
+      <div class="row">
+        <p class="col-sm-2">Denda</p>
+        <div class="col-sm">
+          <p class="card-text">Rp <?= $denda ?></p>
         </div>
       </div>
       <div class="row">
