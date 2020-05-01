@@ -257,13 +257,16 @@ class Admin extends CI_Controller
         // load model
         $this->load->model('Pesanan_model', 'barang');
         $data['barang'] = $this->barang->getBarangStok();
-
+        $data['sejam'] = 60*60;
         $username = $this->input->post('username');
         $id_barang = $this->input->post('barang');
         $jumlah = $this->input->post('jumlah');
         $sewa = $this->input->post('sewa');
         $hari = $this->input->post('hari');
         $status = $this->input->post('status');
+
+        $hari = $this->input->post('hari');
+      
         $barang = $this->db->get_where('barang', ['id' => $id_barang])->row_array();
         // var_dump($total);
         if ($this->form_validation->run('pesanan') == false) {
@@ -314,9 +317,14 @@ class Admin extends CI_Controller
             $sewa = explode(':', $sewa);
             $jam = (int) $sewa[0];
             $menit = (int) $sewa[1];
+          
             $jam_sewa = mktime($jam,$menit,(int)date('s'),(int)date('m'),(int)date('d'),(int)date('Y'));
             $jam_kembali = $jam_sewa+(60*60*24*$hari);
             $total = $barang['harga'];
+            if($id_barang == null){
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Pilih barang yang mau disewa!</div>');
+                redirect('admin/pesanan');
+            }else
             if ($barang['stok'] < $jumlah) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Jumlah melebihi batas, stok hanya ' . $barang['stok'] . ' </div>');
                 redirect('admin/pesanan');
@@ -332,7 +340,9 @@ class Admin extends CI_Controller
                     'tanggal_order' => time(),
                     'tanggal_sewa' => $jam_sewa,
                     'tanggal_kembali' => $jam_kembali,
-                    'tanggal_bayar' => $jam_bayar,
+
+                    'tanggal_bayar' => $tbayar,
+
                     'jumlah_barang' => $jumlah,
                     'total' => $harga,
                     'status' => $status,
@@ -452,5 +462,48 @@ class Admin extends CI_Controller
         $this->load->view('templates/topbar', $data);
         $this->load->view('admin/transaksi_detail');
         $this->load->view('templates/footer');
+    }
+
+    public function kode_transaksi(){
+        $data['pesanan']=$this->db->get('pesanan')->result_array();
+        $kategori = $this->input->post('kategori');
+        $this->form_validation->set_rules('kategori', 'Kategori','required');
+        if($this->form_validation->run() == false){
+            
+            $this->load->view('kode',$data);
+        }else{
+            $kode = $kategori."-".date("Ymd");
+            $dt = [
+                'kode' => $kode
+            ];
+            $this->db->insert('kode_transaksi', $dt);
+            $urut = (int)substr($kode, -4,4);
+            if($urut<10){
+                echo "urut kurang dari 10";
+            }else if($urut<100){
+                echo "urut kurang dari 100";
+                
+            }else if($urut<1000){
+                echo "urut kurang dari 1000";
+                
+            }else if($urut<10000){
+                echo "urut kurang dari 10000";
+
+            }
+
+            var_dump($dt);
+            $this->load->view('kode',$data);
+
+            // redirect('admin/kode_transaksi');
+        }
+    }
+
+    public function ajax($keyword){
+        // var_dump($keyword);die;
+        $data['keyword'] = $keyword;
+        $this->load->model('Pesanan_model', 'barang');
+        $data['barang'] = $this->barang->getBarangByKeyword($keyword);
+        $data['kategori'] = $this->barang->getKategoriByKeyword($keyword);
+        $this->load->view('ajax/index',$data);
     }
 }
