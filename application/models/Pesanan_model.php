@@ -17,6 +17,7 @@ class Pesanan_model extends CI_Model
         $query = "SELECT * FROM barang WHERE
         nama LIKE '%$keyword%' OR
         kategori LIKE '%$keyword%'";
+
         return $this->db->query($query)->result_array();
     }
     public function getKategoriByKeyword($keyword){
@@ -27,11 +28,12 @@ class Pesanan_model extends CI_Model
 
     public function getBarangByCategory($kategori){
         $query = "SELECT * FROM barang WHERE `kategori` = '$kategori' AND `stok` >=1 ";
+
         return $this->db->query($query)->result_array();
     }
-    
-    public function ajax($input){
-        $query = "SELECT * FROM barang WHERE `nama` LIKE '%$input%' OR `kategori` LIKE '%$input%' ";
-        return $this->db->query($query)->row_array();
+    public function getKategoriByKeyword($keyword){
+        $query = "SELECT * FROM kategori WHERE
+        nama LIKE '%$keyword%'";
+        return $this->db->query($query)->result_array();
     }
 }
